@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from 'body-parser';
 import apiRouter from "./routes/index.js";
 import { PORT } from "./config/server.config.js";
-
+import errorHandler from "./utils/errorHandler.js";
 const app = express();
 
 
@@ -16,6 +16,10 @@ app.use("/api",apiRouter);
 app.get("/ping", (req,res) => {
     res.json({message: "Problem service is alive"});
 });
+
+
+//last middleware if any error comes 
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log("server started at port ",PORT);
