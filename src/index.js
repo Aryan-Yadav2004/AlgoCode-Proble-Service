@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import apiRouter from "./routes/index.js";
 import { PORT } from "./config/server.config.js";
 import errorHandler from "./utils/errorHandler.js";
+import connnectToBD from "./config/db.config.js";
 const app = express();
 
 
@@ -21,6 +22,8 @@ app.get("/ping", (req,res) => {
 //last middleware if any error comes 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log("server started at port ",PORT);
+    await connnectToBD();
+    console.log("successfully connected to DB");
 });
