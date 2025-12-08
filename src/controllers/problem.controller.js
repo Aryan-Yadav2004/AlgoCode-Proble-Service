@@ -1,13 +1,24 @@
-import { StatusCodes } from  'http-status-codes'
 import NotImplemented from '../errors/notImplemented.error.js';
+import { ProblemService } from '../services/index.js'
+import { ProblemRepository } from '../repositories/index.js';
+import { StatusCodes } from 'http-status-codes';
+
+const problemService = new ProblemService(new ProblemRepository());
+
 function pingProblemController(req,res) {
     return res.json({message: 'Ping controller is up'});
 }
 
-function addProblem(req, res, next){
+async function addProblem(req, res, next){
     try {
-        // noting implemented
-        throw new NotImplemented('addProblem');
+        console.log("incoming req body",  req.body);
+        const newproblem = await problemService.createProblem(req.body);
+        return res.status(StatusCodes.CREATED).json({
+            success: true,
+            message: "Successfully created a new problem",
+            error: {},
+            data: newproblem
+        })
     } catch (error) {
         next(error);
     }
